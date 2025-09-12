@@ -32,7 +32,7 @@
 
 1. Клонируйте репозиторий:
 
-git clone (не забыть добавить ссылку после коммита)
+git clone https://github.com/5ilen/Overwatcher-the-Cat.git
 cd Overwatcher-the-Cat
 
 2. Установите зависимости:

@@ -1,6 +1,7 @@
 # Overwatcher the Cat
 
-![Discord](https://img.shields.io/discord/1405267732106055783?style=flat&logo=discord&label=Discord)
+![Discord](https://img.shields.io/discord/1405267732106055783?style=for-the-badge&logo=discord&label=Discord&labelColor=60519b&color=60519b)
+
 
 ## О проекте
 
@@ -33,6 +34,7 @@
 1. Клонируйте репозиторий:
 
 git clone https://github.com/5ilen/Overwatcher-the-Cat.git
+
 cd Overwatcher-the-Cat
 
 2. Установите зависимости:
@@ -77,7 +79,8 @@ npm run start
 
 ## Контакты
 
-Автор: **nemasil**  
+Автор: **nemasil**
+
 Сообщество: 143 Aim Club (Русское Aim-комьюнити)  
 
 ---

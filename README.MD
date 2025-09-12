@@ -1,7 +1,6 @@
 # Overwatcher the Cat
 
-![Discord](https://img.shields.io/discord/1405267732106055783?style=for-the-badge&logo=discord&label=Discord&labelColor=60519b&color=60519b)
-
+[![Discord](https://img.shields.io/discord/1405267732106055783?style=for-the-badge&logo=discord&labelColor=60519b&color=60519b&logoColor=white&label=Discord)](https://discord.gg/143aimclub)
 
 ## О проекте
 

@@ -11,6 +11,10 @@ export const imageLinks: Record<string, string> = {
   "!пинг": "https://media.discordapp.net/attachments/1410582185592750152/1411006473663942859/4918359e8a099529.gif?ex=68b4672e&is=68b315ae&hm=c43afcb891830523aeb5ed04b8ecbf8aee453414a4e87f8f3b0d2690b8412bb6&=",
   "!помеха": "https://media.discordapp.net/attachments/1410582185592750152/1412042659090006076/a203387e585ce389.png?ex=68bec3b4&is=68bd7234&hm=3dcc32d4e2f7a5c09383dbb6f866f76e4092f6452e969092f3d4092876f039f1&=&format=webp&quality=lossless",
   "!лень": "https://media.discordapp.net/attachments/1410582185592750152/1410600368957816863/ebc48d4a1e9406c3.png?ex=68beca77&is=68bd78f7&hm=27e315e5d656458a5a2801a9629af3e4a56e5ea816307dd38227be2208a9d636&=&format=webp&quality=lossless",
+  "!гоночки": "https://media.discordapp.net/attachments/1410582185592750152/1416734388661653544/image.png?ex=68c93db7&is=68c7ec37&hm=1326291036e5c60795f0ff9e090e0f9e51629265fa63826c9371a9089dc15497&=&format=webp&quality=lossless&width=1398&height=856",
+  "!мгла": "https://media.discordapp.net/attachments/1410582185592750152/1416085486929444985/image.png?ex=68c98461&is=68c832e1&hm=5a058007bc921fe23898d86940a9076a26d3e209631fbc21b0f6af2036585e02&=&format=webp&quality=lossless",
+  "!обоссу": "https://media.discordapp.net/attachments/1410582185592750152/1417136177974087770/IMG_20250915_161238.webp?ex=68c96269&is=68c810e9&hm=3a06d227bdaac47f2cb05c7b4a7ba26af32ca9ae34addfe09fda490ae361fc73&=&format=webp",
+  "!ресет": "https://media.discordapp.net/attachments/1410582185592750152/1420674827743662080/866f0258bc76810b.webp?ex=68d8e509&is=68d79389&hm=bb37261ae22a9951e84d9f894e8c22437e1412b82c46c06919325049c21893c3&=&format=webp",
 };
 
 export function createImageEmbed(command: string): EmbedBuilder | null {

@@ -1,4 +1,4 @@
-import { Client, TextChannel, EmbedBuilder } from 'discord.js';
+import { Client, TextChannel, EmbedBuilder, Colors, Message } from 'discord.js';
 import { CHANNEL_IDS } from '../constants';
 
 export const imageLinks: Record<string, string> = {
@@ -13,7 +13,7 @@ export const imageLinks: Record<string, string> = {
   "!лень": "https://media.discordapp.net/attachments/1410582185592750152/1410600368957816863/ebc48d4a1e9406c3.png?ex=68beca77&is=68bd78f7&hm=27e315e5d656458a5a2801a9629af3e4a56e5ea816307dd38227be2208a9d636&=&format=webp&quality=lossless",
 };
 
-export function createImageEmbed(command: string) {
+export function createImageEmbed(command: string): EmbedBuilder | null {
   const url = imageLinks[command];
   if (!url) return null;
   return new EmbedBuilder()
@@ -22,37 +22,192 @@ export function createImageEmbed(command: string) {
     .setColor(0x60519b);
 }
 
+// ---------- Инструкция по приватным войсам ----------
+const VOICE_CONTROL_TEXT_CHANNEL_ID = CHANNEL_IDS.voiceControlTextChannel
+const VOICE_CREATE_CHANNEL_ID = CHANNEL_IDS.voiceCreateChannel
+
 export async function ensureInstructionEmbed(client: Client): Promise<string | null> {
-  const controlChannel = client.channels.cache.get(CHANNEL_IDS.voiceControlTextChannel) as TextChannel;
+  const controlChannel = client.channels.cache.get(VOICE_CONTROL_TEXT_CHANNEL_ID) as TextChannel | undefined;
   if (!controlChannel) {
     console.error('Канал управления не найден');
     return null;
   }
 
   const messages = await controlChannel.messages.fetch({ limit: 50 });
-  let instructionMessage = messages.find(msg =>
-    msg.author.id === client.user?.id &&
-    msg.embeds.length > 0 &&
-    msg.embeds[0]?.title === 'Приватные войсчаты'
+  let instructionMessage = messages.find(
+    (msg: Message) =>
+      msg.author.id === client.user?.id &&
+      msg.embeds.length > 0 &&
+      msg.embeds[0]?.title === 'Приватные войсчаты'
   );
 
   const embed = new EmbedBuilder()
     .setTitle('Приватные войсчаты')
     .setDescription(
-      `Зайди в канал <#${CHANNEL_IDS.voiceCreateChannel}>, чтобы создать комнату.\n\n` +
-      `**Команды:**\n` +
-      `!имя новое_название - переименовать свой канал\n` +
-      `!лимит число - установить ограничение на количество участников (0 = нет лимита)\n` +
-      `!кик @пользователь - выгнать пользователя из своего канала`
+      [
+        `Зайди в канал <#${VOICE_CREATE_CHANNEL_ID}>, чтобы создать комнату.`,
+        ``,
+        `Команды владельца канала:`,
+        `• !имя новое_название — переименовать свой канал`,
+        `• !лимит число — установить ограничение на количество участников (0 — без лимита)`,
+        `• !кик @пользователь — выгнать пользователя из своего канала`,
+      ].join('\n')
     )
     .setColor(0x60519b);
 
   if (!instructionMessage) {
-    instructionMessage = await controlChannel.send({ embeds: [embed] });
-    console.log('Создано сообщение с инструкциями в канале управления');
+    const sent = await controlChannel.send({ embeds: [embed] });
+    return sent.id;
   } else {
     await instructionMessage.edit({ embeds: [embed] });
+    return instructionMessage.id;
+  }
+}
+
+// ---------- Правила и роли ----------
+const RULES_CHANNEL_ID = '1405920136464171060';
+
+// Роли-идентификаторы
+const OWNER_ROLE = '1405918254693617724';
+const MOD_ROLE = '1408798930732449852';
+
+const EXPERT_ROLES = [
+  '1409773861783994415',
+  '1409774111424778303',
+  '1409774165308739644',
+  '1409774040662544415',
+];
+
+const GAME_ROLE_PRO = '1411792485167923301';
+const GAME_ROLE_ALLSTAR = '1417570973577642167';
+const GAME_SUBMIT_CHANNEL = '1406031352071061544';
+const GAME_SUBMIT_RULES_LINK =
+  'https://docs.google.com/document/d/14mdT59-8gZwZyxmVbSPa0VE7EDecwZN3Imntit6rcL8/edit?usp=sharing';
+
+// Колонки игровых ролей
+const ROW1_COL1 = [
+  '1411426306679111790',
+  '1411457969132142654',
+  '1411454416220983381',
+  '1411454574652428400',
+  '1411454632009400490',
+  '1411454706903023759',
+  '1411454816256921651',
+];
+
+const ROW1_COL2 = [
+  '1411426443229139026',
+  '1411457890447003668',
+  '1411454951024230551',
+  '1411455381267415142',
+  '1411455505657888838',
+  '1411455585991393310',
+  '1411455661904236564',
+];
+
+const ROW2_COL1 = [
+  '1411426572845449317',
+  '1411457815272358039',
+  '1411428409807994980',
+  '1411455883946360935',
+  '1411455945028141077',
+  '1411456010593505331',
+  '1411456088494178304',
+  '1411456154588024894',
+];
+
+const ROW2_COL2 = [
+  '1417572199514247238',
+  '1417572687093694606',
+  '1417572758182690966',
+  '1417572810288533504',
+  '1417572980858294362',
+  '1417573068213059786',
+  '1417573154359873709',
+  '1417573811175428247',
+];
+
+const START_ROLE = '1411428408105373858';
+const SECRET_ROLE = '1408713657780666428';
+const TROLL_LIMIT_ROLE = '1408794153491501177';
+const SUSPICIOUS_IDEAS_ROLE = '1409774775722836038';
+
+function mentionRoles(list: string[]) {
+  return list.map((id) => `<@&${id}>`).join(' ');
+}
+
+export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rulesId: string; rolesId: string } | null> {
+  const channel = client.channels.cache.get(RULES_CHANNEL_ID) as TextChannel | undefined;
+  if (!channel) {
+    console.error('Канал правил не найден');
+    return null;
   }
 
-  return instructionMessage.id;
+  const recent = await channel.messages.fetch({ limit: 50 });
+  let rulesMsg = recent.find((m) => m.author.id === client.user?.id && m.embeds[0]?.title === 'Правила сервера');
+  let rolesMsg = recent.find((m) => m.author.id === client.user?.id && m.embeds[0]?.title === 'Роли');
+
+  // Правила
+  const rulesEmbed = new EmbedBuilder()
+    .setTitle('Правила сервера')
+    .setColor(Colors.Purple)
+    .setDescription(
+      [
+        `Мгновенный банчик за:`,
+        `— Раздувание политоты и выплывающей из неё чернухи;`,
+        `— Сливы персональной информации, угрозы и прочий негатив, связанный с IRL;`,
+        `— Постинг контента, нарушающего правила Discord: порнография, жестокость, запрещённое ПО и прочее;`,
+        `— Призывы к действиям из пунктов выше;`,
+        ``,
+        `Также запрещается:`,
+        `— Откровенный троллинг новичков и намеренное введение их в заблуждение;`,
+        `— Особо отвратительные оскорбления или травля; трешток сам по себе не запрещён.`,
+      ].join('\n')
+    );
+
+  // Роли
+  const rolesEmbed = new EmbedBuilder()
+    .setTitle('Роли')
+    .setColor(Colors.Blurple)
+    .addFields(
+      {
+        name: 'Администраторские роли',
+        value: `${`<@&${OWNER_ROLE}>`} — владельцы\n${`<@&${MOD_ROLE}>`} — модераторы`,
+      },
+      {
+        name: 'Экспертные роли',
+        value: `${mentionRoles(EXPERT_ROLES)} — участники, компетентные в своих сферах; к мнению можно прислушиваться`,
+      },
+      {
+        name: 'Игровые роли — как получить',
+        value: [
+          `Для сабмита игровой роли отправьте подтверждение в канал <#${GAME_SUBMIT_CHANNEL}>;`,
+          `Правила подачи: ${GAME_SUBMIT_RULES_LINK}`,
+          `${`<@&${GAME_ROLE_PRO}>`} — профессиональный или полупрофессиональный игрок, играет турниры и получает призовые (выдаётся индивидуально).`,
+          `${`<@&${GAME_ROLE_ALLSTAR}>`} — получил 143 All-Star ранги в трёх играх (учитываются с момента вступления роли; прайм не в счёт).`,
+        ].join('\n'),
+      },
+      { name: 'Игровые роли (ряд 1, колонка 1)', value: mentionRoles(ROW1_COL1), inline: true },
+      { name: 'Игровые роли (ряд 1, колонка 2)', value: mentionRoles(ROW1_COL2), inline: true },
+      { name: '\u200B', value: '\u200B', inline: false },
+      { name: 'Игровые роли (ряд 2, колонка 1)', value: mentionRoles(ROW2_COL1), inline: true },
+      { name: 'Игровые роли (ряд 2, колонка 2)', value: mentionRoles(ROW2_COL2), inline: true },
+      {
+        name: 'Прочее',
+        value: [
+          `${`<@&${START_ROLE}>`} — начальная роль для всех;`,
+          `${`<@&${SECRET_ROLE}>`} — секретная роль;`,
+          `${`<@&${TROLL_LIMIT_ROLE}>`} — замечен в троллинге новичков (доступ к вопросам ограничен);`,
+          `${`<@&${SUSPICIOUS_IDEAS_ROLE}>`} — склонен к странным/бредовым идеям (прислушиваться с осторожностью).`,
+        ].join('\n'),
+      }
+    );
+
+  if (!rulesMsg) rulesMsg = await channel.send({ embeds: [rulesEmbed] });
+  else await rulesMsg.edit({ embeds: [rulesEmbed] });
+
+  if (!rolesMsg) rolesMsg = await channel.send({ embeds: [rolesEmbed] });
+  else await rolesMsg.edit({ embeds: [rolesEmbed] });
+
+  return { rulesId: rulesMsg.id, rolesId: rolesMsg.id };
 }

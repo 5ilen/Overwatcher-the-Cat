@@ -12,6 +12,8 @@ import { setupAutoRole } from './managers/autoRole';
 import { setupVoicePrivates } from './managers/voicePrivates';
 import { setupVoiceChannelManager } from './managers/voiceChannelManager';
 import { setupImageCommands } from './embeds/image';
+import { ensureInstructionEmbed } from './embeds/embeds';
+import { ensureRulesAndRolesEmbeds } from './embeds/embeds';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates] });
 const prefix = "!";
@@ -20,6 +22,8 @@ client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`);
 });
 
+ensureInstructionEmbed(client);
+ensureRulesAndRolesEmbeds(client);
 attachClownReactionHandler(client);
 setupAutoRole(client);
 setupVoicePrivates(client);

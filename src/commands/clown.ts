@@ -4,7 +4,7 @@ import { ROLE_IDS } from '../constants';
 
 const clownRoleId = ROLE_IDS.clown;
 
-const guildId = '1041225578587619328';
+const guildId = '1405267732106055783';
  
 const clownEmoji = '🤡';
 

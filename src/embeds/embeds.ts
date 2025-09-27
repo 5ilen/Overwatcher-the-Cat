@@ -182,16 +182,16 @@ export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rules
         name: 'Игровые роли — как получить',
         value: [
           `Для сабмита игровой роли отправьте подтверждение в канал <#${GAME_SUBMIT_CHANNEL}>;`,
-          `Правила подачи: ${GAME_SUBMIT_RULES_LINK}`,
+          `Правила подачи: [тут](<${GAME_SUBMIT_RULES_LINK}>)`,
           `${`<@&${GAME_ROLE_PRO}>`} — профессиональный или полупрофессиональный игрок, играет турниры и получает призовые (выдаётся индивидуально).`,
           `${`<@&${GAME_ROLE_ALLSTAR}>`} — получил 143 All-Star ранги в трёх играх (учитываются с момента вступления роли; прайм не в счёт).`,
         ].join('\n'),
       },
-      { name: 'Игровые роли (ряд 1, колонка 1)', value: mentionRoles(ROW1_COL1), inline: true },
-      { name: 'Игровые роли (ряд 1, колонка 2)', value: mentionRoles(ROW1_COL2), inline: true },
+      { name: 'Игровые роли', value: mentionRoles(ROW1_COL1), inline: true },
+      { name: 'Игровые роли', value: mentionRoles(ROW1_COL2), inline: true },
       { name: '\u200B', value: '\u200B', inline: false },
-      { name: 'Игровые роли (ряд 2, колонка 1)', value: mentionRoles(ROW2_COL1), inline: true },
-      { name: 'Игровые роли (ряд 2, колонка 2)', value: mentionRoles(ROW2_COL2), inline: true },
+      { name: 'Игровые роли', value: mentionRoles(ROW2_COL1), inline: true },
+      { name: 'Игровые роли', value: mentionRoles(ROW2_COL2), inline: true },
       {
         name: 'Прочее',
         value: [

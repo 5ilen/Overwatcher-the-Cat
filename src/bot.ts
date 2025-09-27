@@ -20,10 +20,10 @@ const prefix = "!";
 
 client.on('ready', () => {
   console.log(`Logged in as ${client.user?.tag}`);
+  ensureInstructionEmbed(client);
+  ensureRulesAndRolesEmbeds(client);
 });
 
-ensureInstructionEmbed(client);
-ensureRulesAndRolesEmbeds(client);
 attachClownReactionHandler(client);
 setupAutoRole(client);
 setupVoicePrivates(client);

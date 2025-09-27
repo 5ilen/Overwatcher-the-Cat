@@ -137,7 +137,7 @@ const TROLL_LIMIT_ROLE = '1408794153491501177';
 const SUSPICIOUS_IDEAS_ROLE = '1409774775722836038';
 
 function mentionRoles(list: string[]) {
-  return list.map((id) => `<@&${id}>`).join(' ');
+  return list.map((id) => `<@&${id}>`).join('\n');
 }
 
 export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rulesId: string; rolesId: string } | null> {
@@ -172,7 +172,6 @@ export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rules
   // Роли
   const rolesEmbed = new EmbedBuilder()
     .setTitle('Роли')
-    .setColor(Colors.Blurple)
     .addFields(
       {
         name: 'Администраторские роли',
@@ -187,15 +186,15 @@ export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rules
         value: [
           `Для сабмита игровой роли отправьте подтверждение в канал <#${GAME_SUBMIT_CHANNEL}>;`,
           `Правила подачи: [тут](<${GAME_SUBMIT_RULES_LINK}>)`,
-          `${`<@&${GAME_ROLE_PRO}>`} — профессиональный или полупрофессиональный игрок, играет турниры и получает призовые (выдаётся индивидуально).`,
+          `\n${`<@&${GAME_ROLE_PRO}>`} — профессиональный или полупрофессиональный игрок, играет турниры и получает призовые (выдаётся индивидуально).`,
           `${`<@&${GAME_ROLE_ALLSTAR}>`} — получил 143 All-Star ранги в трёх играх (учитываются с момента вступления роли; прайм не в счёт).`,
         ].join('\n'),
       },
-      { name: 'Игровые роли', value: mentionRoles(ROW1_COL1), inline: true },
-      { name: 'Игровые роли', value: mentionRoles(ROW1_COL2), inline: true },
+      { name: '', value: mentionRoles(ROW1_COL1), inline: true },
+      { name: '', value: mentionRoles(ROW1_COL2), inline: true },
       { name: '\u200B', value: '\u200B', inline: false },
-      { name: 'Игровые роли', value: mentionRoles(ROW2_COL1), inline: true },
-      { name: 'Игровые роли', value: mentionRoles(ROW2_COL2), inline: true },
+      { name: '', value: mentionRoles(ROW2_COL1), inline: true },
+      { name: '', value: mentionRoles(ROW2_COL2), inline: true },
       {
         name: 'Прочее',
         value: [
@@ -205,7 +204,8 @@ export async function ensureRulesAndRolesEmbeds(client: Client): Promise<{ rules
           `${`<@&${SUSPICIOUS_IDEAS_ROLE}>`} — склонен к странным/бредовым идеям (прислушиваться с осторожностью).`,
         ].join('\n'),
       }
-    );
+    )
+    .setColor(0x60519b);
 
   if (!rulesMsg) rulesMsg = await channel.send({ embeds: [rulesEmbed] });
   else await rulesMsg.edit({ embeds: [rulesEmbed] });

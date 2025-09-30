@@ -14,6 +14,9 @@ import { setupVoiceChannelManager } from './managers/voiceChannelManager';
 import { setupImageCommands } from './embeds/image';
 import { ensureInstructionEmbed } from './embeds/embeds';
 import { ensureRulesAndRolesEmbeds } from './embeds/embeds';
+import { handleSuperMuteCommand } from './commands/supermute';
+import { handlePermaMuteCommand } from './commands/permamute';
+import { handleMediaBanCommand } from './commands/mediaban';
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildVoiceStates] });
 const prefix = "!";
@@ -47,10 +50,14 @@ client.on('messageCreate', async (message: Message) => {
     await handleSpamBanCommand(client, message);
   } else if (command === 'тролль') {
     await handleTrollCommand(client, message);
-  } else if (command === 'тролль') {
-    await handleTrollCommand(client, message);
   } else if (command === 'клоун') {
     await handleClownCommand(client, message);
+  } else if (command === 'супермутик') {
+    await handleSuperMuteCommand(client, message);
+  } else if (command === 'пермамутик') {
+    await handlePermaMuteCommand(client, message);
+  } else if (command === 'медиабан') {
+    await handleMediaBanCommand(client, message);
   }
 });
 

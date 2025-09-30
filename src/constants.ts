@@ -3,6 +3,7 @@ export const ROLE_IDS = {
   troll: '1408794153491501177',
   clown: '1409774775722836038',
   autoRole: '1411428408105373858',
+  mediaBan: '1412506071972712618',
 };
 
 export const CHANNEL_IDS = {
